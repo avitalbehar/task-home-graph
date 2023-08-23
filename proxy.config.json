@@ -1,0 +1,13 @@
+
+{
+  "/api/*": [
+    {
+      "target": "https://datadashboard.health.gov.il/api/checkup/nursing",
+      "secure": false
+    },
+    {
+      "target": "https://datadashboard.health.gov.il/api/experienceInstitutes/surveyPatientExperienceVariables",
+      "secure": false
+    }
+  ]
+}

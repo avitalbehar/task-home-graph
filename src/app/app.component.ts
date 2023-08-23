@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import * as echarts from 'echarts';
+
+
 
 @Component({
   selector: 'app-root',
@@ -7,4 +11,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'home-task-graph';
+  constructor(private router: Router) {}
+  navigateToHome() {
+    this.router.navigateByUrl('/home');
+  }
 }
