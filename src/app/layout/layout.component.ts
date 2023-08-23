@@ -10,6 +10,7 @@ export class LayoutComponent {
   isNavbarOpen: boolean = false;
   selectedGraph: number = 0; // 0 indicates all graphs
 
+  //route from links in navbar
   menuItems = [
     {
       label: 'Home',

@@ -47,7 +47,7 @@
   </div> -->
 
 
-
+ <!-- header -->
   <div class="header">
     <span class="last-update">Recorded: 22/08/23</span>
     <div class="subtitle">
@@ -56,15 +56,17 @@
       <button class="toggle_navigationbar" (click)="toggleNavbar()">X</button>
     </div>
   </div>
+
+  <!-- container -->
   <div class="container">
+    <!-- navbar -->
     <div class="navigation" [ngClass]="{'navbar-open': isNavbarOpen}">
       <p-panelMenu [model]="menuItems"></p-panelMenu>
     </div>
-  
+    <!-- homePage -->
     <div class="content">
-     
-  
       <app-home-page></app-home-page>
+      <!-- check if delete -->
       <router-outlet *ngIf="selectedGraph === 0"></router-outlet>
       <router-outlet *ngIf="selectedGraph !== 0" name="graphOutlet"></router-outlet>
     </div>

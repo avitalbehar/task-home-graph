@@ -13,21 +13,25 @@ echarts.use([BarChart, TitleComponent, TooltipComponent, GridComponent, CanvasRe
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
+
 export class HomePageComponent implements OnInit {
-  isNavbarOpen: boolean = false;
+  // isNavbarOpen: boolean = false;
   chartOptions: any;
   additionalChartOptions: any;
   breastfeedingChartOptions: any;
+
   graphId: number = 0;
   showGraph1: boolean =true;
   showGraph2: boolean =true;
   showGraph3: boolean =true;
+
   constructor(private apiService: ApiService, private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
+      this.graphId=parseInt(params['graphId']);
       this.handleGraphId(this.graphId);
       console.log('Graph ID:', this.graphId);
     });
@@ -35,7 +39,7 @@ export class HomePageComponent implements OnInit {
     this.fetchChartData();
    
   }
-
+//change graphes to view
   private handleGraphId(graphId: number) {
     const graphMapping: { [key: number]: { showGraph1: boolean; showGraph2: boolean; showGraph3: boolean } } = {
       0: { showGraph1: true, showGraph2: true, showGraph3: true },
@@ -54,7 +58,9 @@ export class HomePageComponent implements OnInit {
     }
   }
 
+  //view graph on the coponent
   fetchChartData() {
+    //get api of raph from the service
     this.apiService.fetchChartData(this.graphId).subscribe((data: any[]) => {
       if (data) {
         const chartData = {
