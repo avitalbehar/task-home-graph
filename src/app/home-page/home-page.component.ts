@@ -60,7 +60,7 @@ export class HomePageComponent implements OnInit {
 
   //view graph on the coponent
   fetchChartData() {
-    //get api of raph from the service
+    //get api of graph from the service
     this.apiService.fetchChartData(this.graphId).subscribe((data: any[]) => {
       if (data) {
         const chartData = {
