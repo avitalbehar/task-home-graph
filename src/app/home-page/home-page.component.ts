@@ -15,31 +15,27 @@ echarts.use([BarChart, TitleComponent, TooltipComponent, GridComponent, CanvasRe
 })
 
 export class HomePageComponent implements OnInit {
-  // isNavbarOpen: boolean = false;
   chartOptions: any;
   additionalChartOptions: any;
   breastfeedingChartOptions: any;
 
-  graphId: number = 0;
-  showGraph1: boolean =true;
-  showGraph2: boolean =true;
-  showGraph3: boolean =true;
+  showGraph1: boolean = true;
+  showGraph2: boolean = true;
+  showGraph3: boolean = true;
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {
-
-  }
+  graphId:number=0;
+  constructor(private apiService: ApiService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.graphId=parseInt(params['graphId']);
+      this.graphId = parseInt(params['graphId']);
       this.handleGraphId(this.graphId);
       console.log('Graph ID:', this.graphId);
     });
 
     this.fetchChartData();
-   
   }
-//change graphes to view
+
   private handleGraphId(graphId: number) {
     const graphMapping: { [key: number]: { showGraph1: boolean; showGraph2: boolean; showGraph3: boolean } } = {
       0: { showGraph1: true, showGraph2: true, showGraph3: true },
@@ -47,9 +43,9 @@ export class HomePageComponent implements OnInit {
       2: { showGraph1: false, showGraph2: true, showGraph3: false },
       3: { showGraph1: false, showGraph2: false, showGraph3: true },
     };
-    
+
     if (graphMapping.hasOwnProperty(graphId)) {
-      const { showGraph1, showGraph2, showGraph3 } = graphMapping[this.graphId];
+      const { showGraph1, showGraph2, showGraph3 } = graphMapping[graphId];
       this.showGraph1 = showGraph1;
       this.showGraph2 = showGraph2;
       this.showGraph3 = showGraph3;
@@ -58,9 +54,42 @@ export class HomePageComponent implements OnInit {
     }
   }
 
-  //view graph on the coponent
+  private createBarChartOptions(xAxisData: string[], seriesData: any[]) {
+    return {
+      xAxis: {
+        type: 'category',
+        data: xAxisData
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: seriesData.map((seriesItem: any) => ({
+        data: seriesItem.data,
+        type: 'bar',
+        name: seriesItem.measure
+      }))
+    };
+  }
+
+  private createLineChartOptions(xAxisData: string[], seriesData: any[]) {
+    return {
+      xAxis: {
+        type: 'category',
+        data: xAxisData
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          data: seriesData.map((item: any) => item.count),
+          type: 'line'
+        }
+      ]
+    };
+  }
+
   fetchChartData() {
-    //get api of graph from the service
     this.apiService.fetchChartData(this.graphId).subscribe((data: any[]) => {
       if (data) {
         const chartData = {
@@ -125,70 +154,15 @@ export class HomePageComponent implements OnInit {
         });
 
         if (this.graphId === 1) {
-          this.chartOptions = {
-            xAxis: {
-              type: 'category',
-              data: chartData.xAxisData
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: chartData.seriesData.map((seriesItem) => ({
-              data: seriesItem.data,
-              type: 'bar',
-              name: seriesItem.measure
-            }))
-          };
+          this.chartOptions = this.createBarChartOptions(chartData.xAxisData, chartData.seriesData);
 
           const chartElement = document.getElementById('chart-container');
           const chart = echarts.init(chartElement);
           chart.setOption(this.chartOptions);
         } else if (this.graphId === 3) {
-          this.chartOptions = {
-            xAxis: {
-              type: 'category',
-              data: chartData.xAxisData
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: chartData.seriesData.map((seriesItem) => ({
-              data: seriesItem.data,
-              type: 'bar',
-              name: seriesItem.measure
-            }))
-          };
-
-          this.additionalChartOptions = {
-            xAxis: {
-              type: 'category',
-              data: additionalChartData.xAxisData
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: additionalChartData.seriesData.map((seriesItem) => ({
-              data: seriesItem.data,
-              type: 'bar',
-              name: seriesItem.measure
-            }))
-          };
-
-          this.breastfeedingChartOptions = {
-            xAxis: {
-              type: 'category',
-              data: breastfeedingChartData.xAxisData
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                data: breastfeedingChartData.seriesData.map((item) => item.count),
-                type: 'line'
-              }
-            ]
-          };
+          this.chartOptions = this.createBarChartOptions(chartData.xAxisData, chartData.seriesData);
+          this.additionalChartOptions = this.createBarChartOptions(additionalChartData.xAxisData, additionalChartData.seriesData);
+          this.breastfeedingChartOptions = this.createLineChartOptions(breastfeedingChartData.xAxisData, breastfeedingChartData.seriesData);
 
           const chartElement = document.getElementById('chart-container');
           const additionalChartElement = document.getElementById('additional-chart-container');
@@ -201,13 +175,11 @@ export class HomePageComponent implements OnInit {
           chart.setOption(this.chartOptions);
           additionalChart.setOption(this.additionalChartOptions);
           breastfeedingChart.setOption(this.breastfeedingChartOptions);
-
-
         } else {
           console.error('Invalid API response: data is missing');
         }
-      } (error: any) => {
-        console.error('Error fetching breastfeeding chart data:', error);
+      } else {
+        console.error('Error fetching breastfeeding chart data:', Error);
       }
     });
   }

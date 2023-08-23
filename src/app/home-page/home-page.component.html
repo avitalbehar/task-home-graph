@@ -1,14 +1,19 @@
 <!-- view graph -->
 <div class="container">
-    <div *ngIf="showGraph1">
-        <div class="element" id="chart-container" style="height: 400px; width: 100%;"></div>
+    <div class="top-half">
+      <div *ngIf="showGraph1">
+        <div class="element" id="chart-container"></div>
+      </div>
+  
+      <div *ngIf="showGraph2">
+        <div class="element" id="additional-chart-container"></div>
+      </div>
     </div>
-
-    <div *ngIf="showGraph2">
-        <div class="element" id="additional-chart-container" style="height: 400px; width: 100%;"></div>
-    </div>
-
-    <div *ngIf="showGraph3">
+  
+    <div class="bottom-half">
+      <div *ngIf="showGraph3">
         <div class="element element-wide" id="breastfeeding-chart-container"></div>
+      </div>
     </div>
-</div>
+  </div>
+  

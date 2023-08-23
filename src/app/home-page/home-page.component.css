@@ -1,23 +1,39 @@
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .element {
-    flex: 1 1 200px;
-    margin: 10px;
-    height: 400px;
-    width: 100%
-  }
-  
-  .element-wide {
-    flex-basis: 100%;
-  }
 
- 
-  @media (max-width: 600px) {
-    .element {
-      flex-basis: 100%;
-    }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%; /* Set the container height to 100% of its parent */
+}
+
+.top-half {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 50%;
+  height: 50%; /* Set the height of the top half to 50% of the container */
+}
+
+.bottom-half {
+  flex-basis: 50%;
+  display: flex;
+  justify-content: center;
+  height: 50%; /* Set the height of the bottom half to 50% of the container */
+}
+
+.element {
+  flex: 1 1 50%;
+  margin: 1%; /* Add some margin between the elements */
+  height: 100%; /* Set the height of the elements to 100% of their parent */
+  width: 100%; /* Set the width of the elements to 100% of their parent */
+}
+
+.element-wide {
+  flex-basis: 100%;
+}
+
+@media (max-width: 600px) {
+  .element {
+    flex-basis: 100%;
+    height: auto;
   }
+}
